@@ -18,7 +18,7 @@
 #define CELL_PIN 17
 #define CELL_LED 2
 #define MAX_VOLTAGE 4.35 // such value is needed to correctly calculate the actual voltage
-#define KEYPAD_LONG_PRESS_TIME 3000
+#define KEYPAD_LONG_PRESS_TIME 10000
 #define TEAM_SWITCH_TIME 5000
 #define BOMB_DEFUSE_TIME 10000 // used if defusing with buttons
 #define BOMB_ARM_TIME 5000 // used if arming with buttons
