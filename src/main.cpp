@@ -512,10 +512,10 @@ void updateDomination() {
   if (currMillis >= timerMillis[0]) {
     if (timerMillis[1] == 0) {
       dominationStarted = false;
-      printToLcd(true, 0, 0, F("DOMINATION ENDED"));
-      if (dominationScore[0] > dominationScore[1]) printToLcd(false, 1, 1, F("WINNER  TEAM-1"));
-      else if (dominationScore[0] < dominationScore[1]) printToLcd(false, 1, 1, F("WINNER  TEAM-2"));
-      else printToLcd(false, 2, 1, F("SCORE EQUAL"));
+      printToLcd(false, 0, 0, F("DOMINATION ENDED"));
+      // if (dominationScore[0] > dominationScore[1]) printToLcd(false, 1, 1, F("WINNER  TEAM-1"));
+      // else if (dominationScore[0] < dominationScore[1]) printToLcd(false, 1, 1, F("WINNER  TEAM-2"));
+      // else printToLcd(false, 2, 1, F("SCORE EQUAL"));
       useSiren(true); // end the game
     } else {
       timerMillis[0] = timerMillis[1];
