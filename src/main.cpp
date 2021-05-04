@@ -351,6 +351,7 @@ void processHoldKeypress(char key) {
         mainMenu.change_screen(&mainScreen);
         mainMenu.set_focusedLine(0);
         stopGames();
+        useSiren(false);
         mainMenu.update();
         break;
     }
