@@ -319,13 +319,17 @@ void processKeypress(char key) {
         }
         break;
       case 'c':
-        if (!isInGame()) mainMenu.call_function(1);
+        if (!isInGame()) {
+          mainMenu.call_function(1);
+          useSiren(false);
+        }
         break;
       case 'd':
         if (!isInGame()) {
           mainMenu.change_screen(&mainScreen);
           mainMenu.set_focusedLine(0);
           stopGames();
+          useSiren(false);
         }
         break;
       case '*':
