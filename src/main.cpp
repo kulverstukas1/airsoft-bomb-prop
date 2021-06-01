@@ -6,7 +6,7 @@
 #include <LcdBarGraphI2C.h>
 #include <menu.cpp>
 
-#define PROJECT_VERSION "1.1"
+#define PROJECT_VERSION "1.2"
 #define BUZZER_PIN 5
 #define T1_BTN_PIN 6
 #define T2_BTN_PIN 7
