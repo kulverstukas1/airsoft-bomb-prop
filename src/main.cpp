@@ -349,17 +349,20 @@ void processKeypress(char key) {
 //---------------------
 // this only fires when a game is in progress to prevent accidents
 void processHoldKeypress(char key) {
-  if (isInGame() && (key != NO_KEY)) {
-    switch (key) {
-      case 'd':
-        mainMenu.change_screen(&mainScreen);
-        mainMenu.set_focusedLine(0);
-        stopGames();
-        useSiren(false);
-        mainMenu.update();
-        break;
-    }
-  }
+  // do nothing for the sake of accidental reset
+  // to reset during the game, turn off and of the bomb
+
+  // if (isInGame() && (key != NO_KEY)) {
+  //   switch (key) {
+  //     case 'd':
+  //       mainMenu.change_screen(&mainScreen);
+  //       mainMenu.set_focusedLine(0);
+  //       stopGames();
+  //       useSiren(false);
+  //       mainMenu.update();
+  //       break;
+  //   }
+  // }
 }
 //---------------------
 void keypadEvent(KeypadEvent key) {
