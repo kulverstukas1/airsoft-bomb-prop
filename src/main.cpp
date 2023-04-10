@@ -22,6 +22,9 @@ airsoft-bomb. If not, see <https://www.gnu.org/licenses/>.
 #include <LcdBarGraphI2C.h>
 #include <menu.cpp>
 
+/* set this to false to skip battery checking functionality */
+#define CHECK_BATTERY false
+
 #define PROJECT_VERSION "1.2"
 #define BUZZER_PIN 5
 #define T1_BTN_PIN 6
@@ -31,15 +34,17 @@ airsoft-bomb. If not, see <https://www.gnu.org/licenses/>.
 #define KEYPAD_COLS 4
 #define LCD_COLS 16
 #define LCD_ROWS 2
-#define CELL_PIN 17
-#define CELL_LED 2
-#define MAX_VOLTAGE 4.35 // such value is needed to correctly calculate the actual voltage
 #define KEYPAD_LONG_PRESS_TIME 10000
 #define TEAM_SWITCH_TIME 5000
 #define BOMB_DEFUSE_TIME 10000 // used if defusing with buttons
 #define BOMB_ARM_TIME 5000 // used if arming with buttons
 #define SIREN_DURATION_START_GAME 8000
 #define SIREN_DURATION_END_GAME 12000
+#if CHECK_BATTERY
+  #define CELL_PIN 17
+  #define CELL_LED 2
+  #define MAX_VOLTAGE 4.35 // such value is needed to correctly calculate the actual voltage
+#endif
 
 char keys[KEYPAD_ROWS][KEYPAD_COLS] = {
   {'1','2','3', 'a'},
@@ -60,7 +65,9 @@ bool isDisarming; // used to prevent screen update and switch to progress bar pr
 bool isArmed;
 bool isArming;
 bool useDefusalCode; // should the mode be played with code or not
-bool lowBattery;
+#if CHECK_BATTERY
+  bool lowBattery;
+#endif
 bool teamScoreSwitcher[2];
 byte badCodeCounter;
 unsigned long startedMillis;
@@ -258,6 +265,7 @@ float fmap(float x, float in_min, float in_max, float out_min, float out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+#if CHECK_BATTERY
 float getBatteryVolts() {
   int cellInput = analogRead(CELL_PIN);
   float cellVoltage = fmap(cellInput, 0, 1023, 0.0, MAX_VOLTAGE);
@@ -266,7 +274,9 @@ float getBatteryVolts() {
   // delay(500);
   return cellVoltage;
 }
+#endif
 
+#if CHECK_BATTERY
 void checkBattery() {
   float cellVoltage = getBatteryVolts();
   if (cellVoltage < 3.40) {
@@ -274,6 +284,7 @@ void checkBattery() {
     digitalWrite(CELL_LED, HIGH);
   }
 }
+#endif
 //==============================================
 void processInput(char key) {
   if (userInputCount >= MAX_USER_INPUT_LEN) userInputCount = 0;
@@ -636,10 +647,12 @@ void setup() {
 
   pinMode(T1_BTN_PIN, INPUT_PULLUP);
   pinMode(T2_BTN_PIN, INPUT_PULLUP);
-  pinMode(CELL_PIN, INPUT);
   pinMode(BUZZER_PIN, OUTPUT);
   pinMode(SIREN_PIN, OUTPUT);
-  pinMode(CELL_LED, OUTPUT);
+  #if CHECK_BATTERY
+    pinMode(CELL_PIN, INPUT);
+    pinMode(CELL_LED, OUTPUT);
+  #endif
 
   noTone(BUZZER_PIN);
 
@@ -652,13 +665,15 @@ void setup() {
   lcd.backlight();
   delay(100);
 
-  if ((digitalRead(T1_BTN_PIN) == LOW) || (digitalRead(T2_BTN_PIN) == LOW)) {
-    printToLcd(false, 0, 0, F("Battery:"));
-    float cellVoltage = getBatteryVolts();
-    lcd.setCursor(9, 0);
-    lcd.print(cellVoltage);
-    delay(3000);
-  }
+  #if CHECK_BATTERY
+    if ((digitalRead(T1_BTN_PIN) == LOW) || (digitalRead(T2_BTN_PIN) == LOW)) {
+      printToLcd(false, 0, 0, F("Battery:"));
+      float cellVoltage = getBatteryVolts();
+      lcd.setCursor(9, 0);
+      lcd.print(cellVoltage);
+      delay(3000);
+    }
+  #endif
 
   setupProgmems();
   setupScreens();
@@ -690,7 +705,9 @@ void setup() {
 void loop() {
   kpd.getKey(); // this is required to fire off attached events
 
-  if (!lowBattery) checkBattery();
+  #if CHECK_BATTERY
+    if (!lowBattery) checkBattery();
+  #endif
 
   if (sirenStartedMillis > 0) { // check to see if we need to stop the siren already, yo
     if (isInGame() && (millis() - sirenStartedMillis) > SIREN_DURATION_START_GAME) useSiren(false);
