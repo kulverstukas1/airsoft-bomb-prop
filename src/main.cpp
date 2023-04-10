@@ -599,7 +599,12 @@ void startTimer() {
   timerMillis[0] = (atoi(userInputDelayStr) * 1000L) * 60; // this holds the time to compare to
   timerMillis[1] = (atoi(userInputGameStr) * 1000L) * 60; // this holds next time to count
   if ((timerMillis[0] == 0) || timerMillis[1] == 0) {
-    printToLcd(true, 0, 0, F("* INVALID TIME *"));
+    printToLcd(true, 0, 0, F("*INVALID INPUT*"));
+    if (timerMillis[0] == 0) {
+      printToLcd(false, 1, 1, F("* DELAY TIME *"));
+    } else if (timerMillis[1] == 0) {
+      printToLcd(false, 1, 1, F("* GAME TIME *"));
+    }
     delay(3000);
     mainMenu.set_focusedLine(0);
   } else {
