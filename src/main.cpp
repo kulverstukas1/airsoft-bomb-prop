@@ -417,7 +417,7 @@ void startDefusal() {
     printToLcd(true, 0, 0, F("*INVALID INPUT*"));
     printToLcd(false, 1, 1, F("* BOMB TIME *"));
     delay(3000);
-    mainMenu.set_focusedLine(0);
+    mainMenu.set_focusedLine(1);
     return;
   }
   // we don't swap values in this mode, only in domination and timer
@@ -536,7 +536,7 @@ void startDomination() {
     printToLcd(true, 0, 0, F("*INVALID INPUT*"));
     printToLcd(false, 1, 1, F("* GAME TIME *"));
     delay(3000);
-    mainMenu.set_focusedLine(0);
+    mainMenu.set_focusedLine(1);
   } else {
     dominationStarted = true;
   }
@@ -602,11 +602,12 @@ void startTimer() {
     printToLcd(true, 0, 0, F("*INVALID INPUT*"));
     if (timerMillis[0] == 0) {
       printToLcd(false, 1, 1, F("* DELAY TIME *"));
+      mainMenu.set_focusedLine(0);
     } else if (timerMillis[1] == 0) {
       printToLcd(false, 1, 1, F("* GAME TIME *"));
+      mainMenu.set_focusedLine(1);
     }
     delay(3000);
-    mainMenu.set_focusedLine(0);
   } else {
     timerStarted = true;
   }
