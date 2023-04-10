@@ -90,9 +90,8 @@ LcdBarGraphI2C lbg(&lcd, LCD_COLS, 0, 1);
 LiquidMenu mainMenu(lcd);
 
 void playKeypress() {
-    tone(BUZZER_PIN, 1000);
-    delay(100);
     noTone(BUZZER_PIN);
+    tone(BUZZER_PIN, 1000, 100);
 }
 
 void useSiren(bool start) {
