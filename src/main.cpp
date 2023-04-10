@@ -531,8 +531,9 @@ void startDomination() {
   lastMillis = 0;
   timerMillis[0] = (atoi(userInputDelayStr) * 1000L) * 60; // this holds the time to compare to
   timerMillis[1] = (atoi(userInputGameStr) * 1000L) * 60; // this holds next time to count
-  if ((timerMillis[0] == 0) || timerMillis[1] == 0) {
-    printToLcd(true, 0, 0, F("* INVALID TIME *"));
+  if (timerMillis[1] == 0) {
+    printToLcd(true, 0, 0, F("*INVALID INPUT*"));
+    printToLcd(false, 1, 1, F("* GAME TIME *"));
     delay(3000);
     mainMenu.set_focusedLine(0);
   } else {
@@ -547,16 +548,13 @@ void updateDomination() {
     if (timerMillis[1] == 0) {
       dominationStarted = false;
       printToLcd(false, 0, 0, F("DOMINATION ENDED"));
-      // if (dominationScore[0] > dominationScore[1]) printToLcd(false, 1, 1, F("WINNER  TEAM-1"));
-      // else if (dominationScore[0] < dominationScore[1]) printToLcd(false, 1, 1, F("WINNER  TEAM-2"));
-      // else printToLcd(false, 2, 1, F("SCORE EQUAL"));
       useSiren(true); // end the game
     } else {
+      if (timerMillis[0] > 0) useSiren(true); // start the game
       timerMillis[0] = timerMillis[1];
       timerMillis[1] = 0;
       showScore = true;
       lcd.clear();
-      useSiren(true); // start the game
       startedMillis = millis();
     }
   } else if ((millis() - lastMillis) >= 1000) {
