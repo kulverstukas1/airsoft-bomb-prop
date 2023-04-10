@@ -64,6 +64,7 @@ bool isDisarmed;
 bool isDisarming; // used to prevent screen update and switch to progress bar printing in multiple modes
 bool isArmed;
 bool isArming;
+bool isInScoreScreen;
 bool useDefusalCode; // should the mode be played with code or not
 #if CHECK_BATTERY
   bool lowBattery;
@@ -334,25 +335,25 @@ void processKeypress(char key) {
     playKeypress();
     switch (key) {
       case 'a':
-        if (!isInGame()) {
+        if (!isInGame() && !isInScoreScreen) {
           mainMenu.switch_focus(false);
           resetInputPos();
         }
         break;
       case 'b':
-        if (!isInGame()) {
+        if (!isInGame() && !isInScoreScreen) {
           mainMenu.switch_focus(true);
           resetInputPos();
         }
         break;
       case 'c':
-        if (!isInGame()) {
+        if (!isInGame() && !isInScoreScreen) {
           mainMenu.call_function(1);
           useSiren(false);
         }
         break;
       case 'd':
-        if (!isInGame()) {
+        if (!isInGame() && !isInScoreScreen) {
           mainMenu.change_screen(&mainScreen);
           mainMenu.set_focusedLine(0);
           stopGames();
@@ -366,26 +367,44 @@ void processKeypress(char key) {
         if (defusalStarted && (defusalMillis[0] == 0) && useDefusalCode) verifyDefusalCode();
         break;
       default:
-        if (!isInGame()) processInput(key);
+        if (!isInGame() && !isInScoreScreen) processInput(key);
         if (defusalStarted && (defusalMillis[0] == 0) && useDefusalCode) processDefusalInput(key);
         break;
     }
-    if (!isInGame()) mainMenu.update();
+    if (!isInGame() && !isInScoreScreen) mainMenu.update();
   }
 }
 //---------------------
 // this only fires when a game is in progress to prevent accidents
 void processHoldKeypress(char key) {
-  if (isInGame() && (key != NO_KEY)) {
+  if (key != NO_KEY) {
     switch (key) {
+      case 'c':
+        // reset the game
+        if (!isInGame() && isInScoreScreen) {
+          mainMenu.call_function(1);
+          useSiren(false);
+        }
+        break;
       case 'd':
-        for (int i = 0; i < LIST_MAX; i++) {
-          if ((kpd.key[i].kchar == '*') && (kpd.key[i].kstate == HOLD)) {
-            mainMenu.change_screen(&mainScreen);
-            mainMenu.set_focusedLine(0);
-            stopGames();
-            useSiren(false);
-            mainMenu.update();
+        // go to main menu
+        if (!isInGame() && isInScoreScreen) {
+          mainMenu.change_screen(&mainScreen);
+          mainMenu.set_focusedLine(0);
+          mainMenu.update();
+          stopGames();
+          useSiren(false);
+          isInScoreScreen = false;
+        } else {
+          for (int i = 0; i < LIST_MAX; i++) {
+            if ((kpd.key[i].kchar == '*') && (kpd.key[i].kstate == HOLD)) {
+              mainMenu.change_screen(&mainScreen);
+              mainMenu.set_focusedLine(0);
+              stopGames();
+              useSiren(false);
+              mainMenu.update();
+              isInScoreScreen = false;
+            }
           }
         }
         break;
@@ -435,6 +454,7 @@ void startDefusal() {
   isDisarmed = false;
   isDisarming = false;
   defusalStarted = true;
+  isInScoreScreen = true;
 }
 //---------------------
 void updateDefusal() {
@@ -539,6 +559,7 @@ void startDomination() {
     mainMenu.set_focusedLine(1);
   } else {
     dominationStarted = true;
+    isInScoreScreen = true;
   }
   startedMillis = millis();
 }
@@ -610,6 +631,7 @@ void startTimer() {
     delay(3000);
   } else {
     timerStarted = true;
+    isInScoreScreen = true;
   }
   startedMillis = millis();
 }
