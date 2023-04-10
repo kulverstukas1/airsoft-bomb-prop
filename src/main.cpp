@@ -22,10 +22,10 @@ airsoft-bomb. If not, see <https://www.gnu.org/licenses/>.
 #include <LcdBarGraphI2C.h>
 #include <menu.cpp>
 
-/* set this to false to skip battery checking functionality */
+/* set this to false to skip compiling battery checking functionality */
 #define CHECK_BATTERY false
 
-#define PROJECT_VERSION "1.2"
+#define PROJECT_VERSION "1.3"
 #define BUZZER_PIN 5
 #define T1_BTN_PIN 6
 #define T2_BTN_PIN 7
