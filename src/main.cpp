@@ -747,10 +747,12 @@ void loop() {
       if (!isDisarming) {
         isDisarming = true;
         lcd.clear();
+        lastMillis = 0; // set to 0 to show time immediately
       }
       drawProgress(millisDiff, TEAM_SWITCH_TIME);
       if (millisDiff >= TEAM_SWITCH_TIME) {
         isDisarming = false;
+        lastMillis = 0; // set to 0 to show score immediately
         currMillisLoop = 0;
         teamScoreSwitcher[0] = true;
         teamScoreSwitcher[1] = false;
@@ -762,17 +764,22 @@ void loop() {
       if (!isDisarming) {
         isDisarming = true;
         lcd.clear();
+        lastMillis = 0; // set to 0 to show time immediately
       }
       drawProgress(millisDiff, TEAM_SWITCH_TIME);
       if (millisDiff >= TEAM_SWITCH_TIME) {
         isDisarming = false;
+        lastMillis = 0; // set to 0 to show score immediately
         currMillisLoop = 0;
         teamScoreSwitcher[0] = false;
         teamScoreSwitcher[1] = true;
         tone(BUZZER_PIN, 700, 2000);
       }
     } else {
-      if (isDisarming) isDisarming = false;
+      if (isDisarming) {
+        isDisarming = false;
+        lastMillis = 0; // set to 0 to show score immediately
+      }
       if (currMillisLoop != 0) currMillisLoop = 0;
     }
   }
