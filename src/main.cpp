@@ -722,10 +722,10 @@ void setup() {
   mainMenu.set_focusPosition(Position::LEFT);
   mainMenu.switch_focus(1);
 
-  printToLcd(true, 3, 0, F("T-BAG BOMB"));
-  printToLcd(false, 3, 1, F("9v.lt v"));
-  printToLcd(false, 10, 1, F(PROJECT_VERSION));
-  delay(3000);
+  printToLcd(true, 1, 0, F("makerspace.lt"));
+  printToLcd(false, 1, 1, F("Bomb prop v"));
+  printToLcd(false, 12, 1, F(PROJECT_VERSION));
+  delay(1500);
   mainMenu.update();
 }
 
