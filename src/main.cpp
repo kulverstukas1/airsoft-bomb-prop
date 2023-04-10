@@ -380,7 +380,7 @@ void processHoldKeypress(char key) {
     switch (key) {
       case 'd':
         for (int i = 0; i < LIST_MAX; i++) {
-          if ((kpd.key[i].kchar == '#') && (kpd.key[i].kstate == HOLD)) {
+          if ((kpd.key[i].kchar == '*') && (kpd.key[i].kstate == HOLD)) {
             mainMenu.change_screen(&mainScreen);
             mainMenu.set_focusedLine(0);
             stopGames();
