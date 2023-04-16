@@ -57,7 +57,7 @@ byte colPins[KEYPAD_COLS] = {16, 15, 14, 13};
 Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, KEYPAD_ROWS, KEYPAD_COLS);
 bool timerStarted;
 bool dominationStarted;
-bool dominationNoTStarted;
+bool zoneControlStarted;
 bool defusalStarted;
 bool printedLine; // used to prevent refresh of the first line when counting pre-game time
 bool showScore; // used to indicate that pre-game time has finished and domination score can now be shown
@@ -193,12 +193,12 @@ void resetCodeInput() {
 void stopGames() {
   timerStarted = false;
   dominationStarted = false;
-  dominationNoTStarted = false;
+  zoneControlStarted = false;
   defusalStarted = false;
 }
 
 bool isInGame() {
-  return (timerStarted || dominationStarted || dominationNoTStarted || defusalStarted);
+  return (timerStarted || dominationStarted || zoneControlStarted || defusalStarted);
 }
 
 void verifyDefusalCode() {
@@ -633,7 +633,7 @@ void domination() {
 }
 //==============================================
 // callback function, only setup variables here
-void startDominationNoT() {
+void startZoneControl() {
   printedLine = false;
   isInScoreScreen = true;
   lastMillis = 0;
@@ -641,10 +641,10 @@ void startDominationNoT() {
   dominationScore[1] = 0;
   teamScoreSwitcher[0] = false;
   teamScoreSwitcher[1] = false;
-  dominationNoTStarted = true;
+  zoneControlStarted = true;
 }
 //---------------------
-void updateDominationNoT() {
+void updateZoneControl() {
   if ((millis() - lastMillis) >= 1000) {
     lastMillis = millis();
     if (teamScoreSwitcher[0]) dominationScore[0]++;
@@ -668,7 +668,7 @@ void updateDominationNoT() {
   }
 }
 //---------------------
-void dominationNoT() {
+void zoneControl() {
   // empty, only keep this for pretty format
 }
 //==============================================
@@ -766,7 +766,7 @@ void setup() {
 
   defusalLine.attach_function(1, defusal);
   dominationLine.attach_function(1, domination);
-  dominationNoTLine.attach_function(1, startDominationNoT);
+  dominationNoTLine.attach_function(1, startZoneControl);
   timerLine.attach_function(1, timer);
   mainMenu.add_screen(mainScreen);
 
@@ -801,7 +801,7 @@ void loop() {
     else if (!isInGame() && (millis() - sirenStartedMillis) > SIREN_DURATION_END_GAME) useSiren(false);
   }
 
-  if ((dominationStarted && showScore) || dominationNoTStarted) {
+  if ((dominationStarted && showScore) || zoneControlStarted) {
     if ((digitalRead(T1_BTN_PIN) == LOW) && !teamScoreSwitcher[0]) {
       if (currMillisLoop == 0) currMillisLoop = millis();
       int millisDiff = millis() - currMillisLoop;
@@ -810,7 +810,7 @@ void loop() {
         lcd.clear();
         lastMillis = 0; // set to 0 to show time immediately
       }
-      if (dominationNoTStarted) printedLine = false;
+      if (zoneControlStarted) printedLine = false;
       drawProgress(millisDiff, TEAM_SWITCH_TIME);
       if (millisDiff >= TEAM_SWITCH_TIME) {
         isDisarming = false;
@@ -828,7 +828,7 @@ void loop() {
         lcd.clear();
         lastMillis = 0; // set to 0 to show time immediately
       }
-      if (dominationNoTStarted) printedLine = false;
+      if (zoneControlStarted) printedLine = false;
       drawProgress(millisDiff, TEAM_SWITCH_TIME);
       if (millisDiff >= TEAM_SWITCH_TIME) {
         isDisarming = false;
@@ -898,8 +898,8 @@ void loop() {
     updateTimer();
   } else if (dominationStarted) {
     updateDomination();
-  } else if (dominationNoTStarted) {
-    updateDominationNoT();
+  } else if (zoneControlStarted) {
+    updateZoneControl();
   } else if (defusalStarted) {
     updateDefusal();
   }
