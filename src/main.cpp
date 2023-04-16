@@ -822,7 +822,6 @@ void loop() {
           isArming = false;
           lcd.clear();
           tone(BUZZER_PIN, 700, 2000);
-          delay(1000);
           startedMillis = millis();
           currMillisLoop = 0;
           ignoreBtn = ((digitalRead(T1_BTN_PIN) == LOW) || (digitalRead(T2_BTN_PIN) == LOW));
