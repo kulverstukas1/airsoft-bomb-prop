@@ -25,6 +25,7 @@ const char CODE_STR[] PROGMEM = "Code: ";
 const char BOMB_STR[] PROGMEM = "Bomb  min: ";
 const char DEFUSAL_STR[] PROGMEM = "Defusal";
 const char DOMINATION_STR[] PROGMEM = "Domination";
+const char DOMINATION_NO_T_STR[] PROGMEM = "Domination no T";
 const char TIMER_STR[] PROGMEM = "Timer";
 const char START_STR[] PROGMEM = "START";
 
@@ -41,8 +42,9 @@ byte userCodeInputCount = 0;
 
 LiquidLine defusalLine(1, 0, DEFUSAL_STR);
 LiquidLine dominationLine(1, 1, DOMINATION_STR);
+LiquidLine dominationNoTLine(1, 1, DOMINATION_NO_T_STR);
 LiquidLine timerLine(1, 1, TIMER_STR);
-LiquidScreen mainScreen(defusalLine, dominationLine, timerLine);
+LiquidScreen mainScreen(defusalLine, dominationLine, dominationNoTLine, timerLine);
 
 LiquidLine startLine(1, 1, START_STR);
 
@@ -64,6 +66,7 @@ void setupScreens() {
 void setupProgmems() {
     defusalLine.set_asProgmem(1);
     dominationLine.set_asProgmem(1);
+    dominationNoTLine.set_asProgmem(1);
     timerLine.set_asProgmem(1);
     startLine.set_asProgmem(1);
     defusalDelayTime.set_asProgmem(1);

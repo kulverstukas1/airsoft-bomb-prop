@@ -57,6 +57,7 @@ byte colPins[KEYPAD_COLS] = {16, 15, 14, 13};
 Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, KEYPAD_ROWS, KEYPAD_COLS);
 bool timerStarted;
 bool dominationStarted;
+bool dominationNoTStarted;
 bool defusalStarted;
 bool printedLine; // used to prevent refresh of the first line when counting pre-game time
 bool showScore; // used to indicate that pre-game time has finished and domination score can now be shown
@@ -80,7 +81,7 @@ unsigned long lastBeepMillis; // to know when last time beep happened
 unsigned long sirenStartedMillis;
 unsigned long timerMillis[2]; // holds delay and game times
 unsigned long defusalMillis[2]; // holds delay and game times
-unsigned short dominationScore[2];
+unsigned int dominationScore[2];
 char defusalCode[MAX_CODE_LEN+1];
 
 // LCD initialization
@@ -192,11 +193,12 @@ void resetCodeInput() {
 void stopGames() {
   timerStarted = false;
   dominationStarted = false;
+  dominationNoTStarted = false;
   defusalStarted = false;
 }
 
 bool isInGame() {
-  return (timerStarted || dominationStarted || defusalStarted);
+  return (timerStarted || dominationStarted || dominationNoTStarted || defusalStarted);
 }
 
 void verifyDefusalCode() {
@@ -631,6 +633,46 @@ void domination() {
 }
 //==============================================
 // callback function, only setup variables here
+void startDominationNoT() {
+  printedLine = false;
+  isInScoreScreen = true;
+  lastMillis = 0;
+  dominationScore[0] = 0;
+  dominationScore[1] = 0;
+  teamScoreSwitcher[0] = false;
+  teamScoreSwitcher[1] = false;
+  dominationNoTStarted = true;
+}
+//---------------------
+void updateDominationNoT() {
+  if ((millis() - lastMillis) >= 1000) {
+    lastMillis = millis();
+    if (teamScoreSwitcher[0]) dominationScore[0]++;
+    if (teamScoreSwitcher[1]) dominationScore[1]++;
+    if (!isDisarming) { // only print score if progressbar isn't showing
+      if (!printedLine) {
+        printToLcd(true, 0, 0, F("TEAM 1:"));
+        printToLcd(false, 9, 0, F("TEAM 2:"));
+        printedLine = true;
+      }
+      lcd.setCursor(0, 1);
+      lcd.print(dominationScore[0], DEC);
+      lcd.setCursor(9, 1);
+      lcd.print(dominationScore[1], DEC);
+    } else {
+      if (!printedLine) {
+        printToLcd(false, 3, 0, F("CAPTURING"));
+        printedLine = true;
+      }
+    }
+  }
+}
+//---------------------
+void dominationNoT() {
+  // empty, only keep this for pretty format
+}
+//==============================================
+// callback function, only setup variables here
 void startTimer() {
   printedLine = false;
   lastMillis = 0;
@@ -724,6 +766,7 @@ void setup() {
 
   defusalLine.attach_function(1, defusal);
   dominationLine.attach_function(1, domination);
+  dominationNoTLine.attach_function(1, startDominationNoT);
   timerLine.attach_function(1, timer);
   mainMenu.add_screen(mainScreen);
 
@@ -758,7 +801,7 @@ void loop() {
     else if (!isInGame() && (millis() - sirenStartedMillis) > SIREN_DURATION_END_GAME) useSiren(false);
   }
 
-  if (dominationStarted && showScore) {
+  if ((dominationStarted && showScore) || dominationNoTStarted) {
     if ((digitalRead(T1_BTN_PIN) == LOW) && !teamScoreSwitcher[0]) {
       if (currMillisLoop == 0) currMillisLoop = millis();
       int millisDiff = millis() - currMillisLoop;
@@ -767,6 +810,7 @@ void loop() {
         lcd.clear();
         lastMillis = 0; // set to 0 to show time immediately
       }
+      if (dominationNoTStarted) printedLine = false;
       drawProgress(millisDiff, TEAM_SWITCH_TIME);
       if (millisDiff >= TEAM_SWITCH_TIME) {
         isDisarming = false;
@@ -784,6 +828,7 @@ void loop() {
         lcd.clear();
         lastMillis = 0; // set to 0 to show time immediately
       }
+      if (dominationNoTStarted) printedLine = false;
       drawProgress(millisDiff, TEAM_SWITCH_TIME);
       if (millisDiff >= TEAM_SWITCH_TIME) {
         isDisarming = false;
@@ -793,7 +838,7 @@ void loop() {
         teamScoreSwitcher[1] = true;
         tone(BUZZER_PIN, 700, 2000);
       }
-    } else {
+    } else { // if both buttons are not pressed
       if (isDisarming) {
         isDisarming = false;
         lastMillis = 0; // set to 0 to show score immediately
@@ -853,6 +898,8 @@ void loop() {
     updateTimer();
   } else if (dominationStarted) {
     updateDomination();
+  } else if (dominationNoTStarted) {
+    updateDominationNoT();
   } else if (defusalStarted) {
     updateDefusal();
   }
