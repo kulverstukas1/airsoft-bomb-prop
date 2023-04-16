@@ -261,9 +261,11 @@ unsigned int getWaitTimeForBeep(unsigned long totalBombMillis, unsigned long pas
  else return 200; // 5 times / sec
 }
 
+#if CHECK_BATTERY
 float fmap(float x, float in_min, float in_max, float out_min, float out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+#endif
 
 #if CHECK_BATTERY
 float getBatteryVolts() {
