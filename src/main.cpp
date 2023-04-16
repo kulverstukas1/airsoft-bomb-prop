@@ -510,6 +510,8 @@ void updateDefusal() {
         printToLcd(true, 4, 0, F("DISARMED"));
         printTime(defusalMillis[1]-currMillisDefusal, 10, 1);
         defusalStarted = false;
+        printToLcd(false, 0, 1, F("TIME LEFT:"));
+        delay(5000);
         useSiren(true); // end the game
       } else if (isArmed) {
         if (useDefusalCode) {
