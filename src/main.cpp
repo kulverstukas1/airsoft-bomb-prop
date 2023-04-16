@@ -820,7 +820,8 @@ void loop() {
         }
       } else if (!isDisarmed) {
         if (!isDisarming) isDisarming = true;
-        printToLcd(false, 3, 0, F("DISARMING"));
+        printToLcd(false, 0, 0, F("DISARMING"));
+        printTime(defusalMillis[1]-currMillisDefusal, 10, 0);
         drawProgress(millisDiff, BOMB_DEFUSE_TIME);
         printedLine = false;
         if (millisDiff >= BOMB_DEFUSE_TIME) {
