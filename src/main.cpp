@@ -810,6 +810,7 @@ void loop() {
           tone(BUZZER_PIN, 700, 2000);
           delay(1000);
           startedMillis = millis();
+          currMillisLoop = 0;
         }
       } else if (!isDisarmed) {
         if (!isDisarming) isDisarming = true;
