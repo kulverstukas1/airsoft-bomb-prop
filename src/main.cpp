@@ -523,6 +523,10 @@ void updateDefusal() {
       useSiren(true); // end the game
     }
     if (defusalStarted && isArmed) {
+      if (!useDefusalCode && (lastBeepMillis == 0)) { // skip first beep when the bomb has just been planted with buttons
+        lastBeepMillis = millis();
+        return;
+      }
       unsigned int waitTime = getWaitTimeForBeep(defusalMillis[1], currMillisDefusal);
       if ((millis() - lastBeepMillis) > waitTime) {
         lastBeepMillis = millis();
