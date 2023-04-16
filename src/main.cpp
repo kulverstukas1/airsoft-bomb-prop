@@ -94,7 +94,7 @@ void playKeypress(char key) {
     noTone(BUZZER_PIN);
     switch (key) {
       case 'c':
-        tone(BUZZER_PIN, 600, 100);
+        tone(BUZZER_PIN, 1400, 100);
         break;
       case 'd':
         tone(BUZZER_PIN, 400, 100);
