@@ -90,9 +90,18 @@ LcdBarGraphI2C lbg(&lcd, LCD_COLS, 0, 1);
 // menu initialization. It's built in menu.cpp file
 LiquidMenu mainMenu(lcd);
 
-void playKeypress() {
+void playKeypress(char key) {
     noTone(BUZZER_PIN);
-    tone(BUZZER_PIN, 1000, 100);
+    switch (key) {
+      case 'c':
+        tone(BUZZER_PIN, 600, 100);
+        break;
+      case 'd':
+        tone(BUZZER_PIN, 400, 100);
+        break;
+      default:
+        tone(BUZZER_PIN, 1000, 100);
+    }
 }
 
 void useSiren(bool start) {
@@ -334,7 +343,7 @@ void processDefusalInput(char key) {
 //---------------------
 void processKeypress(char key) {
   if (key != NO_KEY) {
-    playKeypress();
+    playKeypress(key);
     switch (key) {
       case 'a':
         if (!isInGame() && !isInScoreScreen) {
