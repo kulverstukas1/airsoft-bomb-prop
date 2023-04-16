@@ -66,6 +66,7 @@ bool isArmed;
 bool isArming;
 bool isInScoreScreen;
 bool useDefusalCode; // should the mode be played with code or not
+bool ignoreBtn; // used in defusal mode to check if arming button was released after the bomb was planted
 #if CHECK_BATTERY
   bool lowBattery;
 #endif
@@ -791,8 +792,12 @@ void loop() {
   }
 
   if (defusalStarted && (defusalMillis[0] == 0)) {
+    if (ignoreBtn) {
+      // check if button was released after planting the bomb to not start defusing immediately if someone keeps holding the button
+      ignoreBtn = ((digitalRead(T1_BTN_PIN) == LOW) || (digitalRead(T2_BTN_PIN) == LOW));
+    }
     // use any of two buttons to arm and defuse
-    if (!useDefusalCode && ((digitalRead(T1_BTN_PIN) == LOW) || (digitalRead(T2_BTN_PIN) == LOW))) {
+    if (!ignoreBtn && !useDefusalCode && ((digitalRead(T1_BTN_PIN) == LOW) || (digitalRead(T2_BTN_PIN) == LOW))) {
       if (currMillisLoop == 0) {
         currMillisLoop = millis();
         lcd.clear();
@@ -811,6 +816,7 @@ void loop() {
           delay(1000);
           startedMillis = millis();
           currMillisLoop = 0;
+          ignoreBtn = ((digitalRead(T1_BTN_PIN) == LOW) || (digitalRead(T2_BTN_PIN) == LOW));
         }
       } else if (!isDisarmed) {
         if (!isDisarming) isDisarming = true;
