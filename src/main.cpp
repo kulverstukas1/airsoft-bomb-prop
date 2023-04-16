@@ -493,10 +493,10 @@ void updateDefusal() {
             printedLine = true;
           }
         }
-        printTime(defusalMillis[1], 11, 1);
+        printTime(defusalMillis[1], 10, 1);
       } else if (isDisarmed) {
         printToLcd(true, 4, 0, F("DISARMED"));
-        printTime(defusalMillis[1]-currMillisDefusal, 11, 1);
+        printTime(defusalMillis[1]-currMillisDefusal, 10, 1);
         defusalStarted = false;
         useSiren(true); // end the game
       } else if (isArmed) {
@@ -512,13 +512,13 @@ void updateDefusal() {
             printedLine = true;
           }
         }
-        printTime(defusalMillis[1]-currMillisDefusal, 11, 1);
+        printTime(defusalMillis[1]-currMillisDefusal, 10, 1);
       }
-      printToLcd(false, 0, 1, F("TIME LEFT: "));
+      printToLcd(false, 0, 1, F("TIME LEFT:"));
     }
     if (isArmed && (currMillisDefusal > defusalMillis[1])) {
       printToLcd(true, 4, 0, F("EXPLODED"));
-      printToLcd(false, 0, 1, F("TIME LEFT: 00:00"));
+      printToLcd(false, 0, 1, F("TIME LEFT:00:00"));
       defusalStarted = false;
       useSiren(true); // end the game
     }
@@ -590,7 +590,7 @@ void updateDomination() {
       if (teamScoreSwitcher[0]) dominationScore[0]++;
       if (teamScoreSwitcher[1]) dominationScore[1]++;
       printToLcd(false, 0, 0, F("TIME LEFT:"));
-      printTime((timerMillis[0]-currMillis), 11, 0);
+      printTime((timerMillis[0]-currMillis), 10, 0);
       if (!isDisarming) { // only print score if progressbar isn't showing
         printToLcd(false, 0, 1, F("T1:      ")); // need to print with spaces to clear progress left-overs
         printToLcd(false, 9, 1, F("T2:    "));
