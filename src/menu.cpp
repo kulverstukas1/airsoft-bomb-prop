@@ -42,9 +42,9 @@ byte userCodeInputCount = 0;
 
 LiquidLine defusalLine(1, 0, DEFUSAL_STR);
 LiquidLine dominationLine(1, 1, DOMINATION_STR);
-LiquidLine dominationNoTLine(1, 1, ZONE_CONTROL);
+LiquidLine zoneControlLine(1, 1, ZONE_CONTROL);
 LiquidLine timerLine(1, 1, TIMER_STR);
-LiquidScreen mainScreen(defusalLine, dominationLine, dominationNoTLine, timerLine);
+LiquidScreen mainScreen(defusalLine, dominationLine, zoneControlLine, timerLine);
 
 LiquidLine startLine(1, 1, START_STR);
 
@@ -66,7 +66,7 @@ void setupScreens() {
 void setupProgmems() {
     defusalLine.set_asProgmem(1);
     dominationLine.set_asProgmem(1);
-    dominationNoTLine.set_asProgmem(1);
+    zoneControlLine.set_asProgmem(1);
     timerLine.set_asProgmem(1);
     startLine.set_asProgmem(1);
     defusalDelayTime.set_asProgmem(1);
