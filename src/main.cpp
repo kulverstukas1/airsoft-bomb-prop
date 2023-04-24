@@ -536,6 +536,7 @@ void updateDefusal() {
       printToLcd(true, 4, 0, F("EXPLODED"));
       printToLcd(false, 0, 1, F("TIME LEFT:00:00"));
       defusalStarted = false;
+      delay(5000);
       useSiren(true); // end the game
     }
     if (defusalStarted && isArmed) {
