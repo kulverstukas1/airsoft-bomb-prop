@@ -40,6 +40,7 @@ airsoft-bomb. If not, see <https://www.gnu.org/licenses/>.
 #define BOMB_ARM_TIME 5000 // used if arming with buttons
 #define SIREN_DURATION_START_GAME 8000
 #define SIREN_DURATION_END_GAME 12000
+#define SIREN_DELAY_TIME 5000
 #if CHECK_BATTERY
   #define CELL_PIN 17
   #define CELL_LED 2
@@ -217,7 +218,7 @@ void verifyDefusalCode() {
       printTime(defusalMillis[1]-currMillisDefusal, 10, 1);
       defusalStarted = false;
       printToLcd(false, 0, 1, F("TIME LEFT:"));
-      delay(5000);
+      delay(SIREN_DELAY_TIME);
       useSiren(true); // disarmed with code, so end the game
     } else {
       printToLcd(false, 0, 0, F("    BAD CODE    "));
@@ -519,7 +520,7 @@ void updateDefusal() {
         printTime(defusalMillis[1]-currMillisDefusal, 10, 1);
         defusalStarted = false;
         printToLcd(false, 0, 1, F("TIME LEFT:"));
-        delay(5000);
+        delay(SIREN_DELAY_TIME);
         useSiren(true); // end the game when disarmed with buttons
       } else if (isArmed) {
         if (useDefusalCode) {
@@ -542,7 +543,7 @@ void updateDefusal() {
       printToLcd(true, 4, 0, F("EXPLODED"));
       printToLcd(false, 0, 1, F("TIME LEFT:00:00"));
       defusalStarted = false;
-      delay(5000);
+      delay(SIREN_DELAY_TIME);
       useSiren(true); // end the game when time runs out
     }
     if (defusalStarted && isArmed) {
