@@ -215,9 +215,9 @@ void verifyDefusalCode() {
       isDisarmed = true;
       isArmed = false;
       printToLcd(true, 4, 0, F("DISARMED"));
+      printToLcd(false, 0, 1, F("TIME LEFT:"));
       printTime(defusalMillis[1]-currMillisDefusal, 10, 1);
       defusalStarted = false;
-      printToLcd(false, 0, 1, F("TIME LEFT:"));
       delay(SIREN_DELAY_TIME);
       useSiren(true); // disarmed with code, so end the game
     } else {
@@ -517,9 +517,9 @@ void updateDefusal() {
         printTime(defusalMillis[1], 10, 1);
       } else if (isDisarmed) {
         printToLcd(true, 4, 0, F("DISARMED"));
+        printToLcd(false, 0, 1, F("TIME LEFT:"));
         printTime(defusalMillis[1]-currMillisDefusal, 10, 1);
         defusalStarted = false;
-        printToLcd(false, 0, 1, F("TIME LEFT:"));
         delay(SIREN_DELAY_TIME);
         useSiren(true); // end the game when disarmed with buttons
       } else if (isArmed) {
