@@ -892,7 +892,6 @@ void loop() {
           isDisarmed = true;
           isDisarming = false;
           lcd.clear();
-          useSiren(true); // end the game
         }
       }
     } else {
