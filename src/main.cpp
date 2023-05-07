@@ -767,7 +767,7 @@ void setup() {
 
   defusalLine.attach_function(1, defusal);
   dominationLine.attach_function(1, domination);
-  dominationNoTLine.attach_function(1, startZoneControl);
+  zoneControlLine.attach_function(1, startZoneControl);
   timerLine.attach_function(1, timer);
   mainMenu.add_screen(mainScreen);
 
