@@ -212,7 +212,13 @@ void verifyDefusalCode() {
   if (isArmed) {
     if (codeOk) {
       isDisarmed = true;
-      useSiren(true); // disarmed, so end the game
+      isArmed = false;
+      printToLcd(true, 4, 0, F("DISARMED"));
+      printTime(defusalMillis[1]-currMillisDefusal, 10, 1);
+      defusalStarted = false;
+      printToLcd(false, 0, 1, F("TIME LEFT:"));
+      delay(5000);
+      useSiren(true); // disarmed with code, so end the game
     } else {
       printToLcd(false, 0, 0, F("    BAD CODE    "));
       delay(1000);
@@ -514,7 +520,7 @@ void updateDefusal() {
         defusalStarted = false;
         printToLcd(false, 0, 1, F("TIME LEFT:"));
         delay(5000);
-        useSiren(true); // end the game
+        useSiren(true); // end the game when disarmed with buttons
       } else if (isArmed) {
         if (useDefusalCode) {
           if (!printedLine) {
@@ -537,7 +543,7 @@ void updateDefusal() {
       printToLcd(false, 0, 1, F("TIME LEFT:00:00"));
       defusalStarted = false;
       delay(5000);
-      useSiren(true); // end the game
+      useSiren(true); // end the game when time runs out
     }
     if (defusalStarted && isArmed) {
       if (!useDefusalCode && (lastBeepMillis == 0)) { // skip first beep when the bomb has just been planted with buttons
