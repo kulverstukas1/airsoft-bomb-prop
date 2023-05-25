@@ -84,6 +84,7 @@ unsigned long timerMillis[2]; // holds delay and game times
 unsigned long defusalMillis[2]; // holds delay and game times
 unsigned int dominationScore[2];
 char defusalCode[MAX_CODE_LEN+1];
+int mainMenuLineIdx;
 
 // LCD initialization
 LiquidCrystal_I2C lcd(0x27, LCD_COLS, LCD_ROWS);
@@ -369,6 +370,7 @@ void processKeypress(char key) {
         break;
       case 'c':
         if (!isInGame() && !isInScoreScreen) {
+          mainMenuLineIdx = mainMenu.get_focusedLine();
           mainMenu.call_function(1);
           useSiren(false);
         }
@@ -376,7 +378,7 @@ void processKeypress(char key) {
       case 'd':
         if (!isInGame() && !isInScoreScreen) {
           mainMenu.change_screen(&mainScreen);
-          mainMenu.set_focusedLine(0);
+          mainMenu.set_focusedLine(mainMenuLineIdx);
           stopGames();
           useSiren(false);
         }
@@ -411,7 +413,7 @@ void processHoldKeypress(char key) {
         // go to main menu
         if (!isInGame() && isInScoreScreen) {
           mainMenu.change_screen(&mainScreen);
-          mainMenu.set_focusedLine(0);
+          mainMenu.set_focusedLine(mainMenuLineIdx);
           mainMenu.update();
           stopGames();
           useSiren(false);
@@ -420,7 +422,7 @@ void processHoldKeypress(char key) {
           for (int i = 0; i < LIST_MAX; i++) {
             if ((kpd.key[i].kchar == '*') && (kpd.key[i].kstate == HOLD)) {
               mainMenu.change_screen(&mainScreen);
-              mainMenu.set_focusedLine(0);
+              mainMenu.set_focusedLine(mainMenuLineIdx);
               stopGames();
               useSiren(false);
               mainMenu.update();
