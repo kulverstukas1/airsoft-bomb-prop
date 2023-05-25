@@ -176,6 +176,7 @@ void resetAllInput() {
   userInputBombStr[0] = '\0';
   userInputCodeStr[0] = '\0';
   defusalCode[0] = '\0';
+  userInputCount = 0;
 }
 
 void resetInputPos() {
