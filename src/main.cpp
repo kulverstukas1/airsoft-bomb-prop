@@ -370,7 +370,9 @@ void processKeypress(char key) {
         break;
       case 'c':
         if (!isInGame() && !isInScoreScreen) {
-          mainMenuLineIdx = mainMenu.get_focusedLine();
+          if (mainMenu.get_currentScreen() == &mainScreen) {
+            mainMenuLineIdx = mainMenu.get_focusedLine();
+          }
           mainMenu.call_function(1);
           useSiren(false);
         }
