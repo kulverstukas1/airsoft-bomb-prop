@@ -4,6 +4,7 @@
 .vscode/launch.json
 .vscode/ipch
 examples/
+instrukcija/
 !lib
 lib/*
 !lib/LcdBarGraphI2C
