@@ -163,7 +163,7 @@ void resetUserInput() {
     } else if (mainMenu.get_focusedLine() == 1) {
       userInputBombStr[0] = '\0';
     } else if (mainMenu.get_focusedLine() == 2) {
-      userInputCodeStr[0] = '\0';
+      memset(userInputCodeStr, 0, sizeof(userInputCodeStr));
       userCodeInputCount = 0;
     }
   }
@@ -186,7 +186,7 @@ void resetInputPos() {
 }
 
 void resetCodeInput() {
-  defusalCode[0] = '\0';
+  memset(defusalCode, 0, sizeof(defusalCode));
   userCodeInputCount = 0;
   if (isArmed) lcd.setCursor(7, 0);
   else lcd.setCursor(10, 0);
@@ -311,7 +311,10 @@ void checkBattery() {
 //==============================================
 void processInput(char key) {
   if (userInputCount >= MAX_USER_INPUT_LEN) userInputCount = 0;
-  if (userCodeInputCount >= MAX_CODE_LEN) userCodeInputCount = 0;
+  if (userCodeInputCount >= MAX_CODE_LEN) {
+    memset(userInputCodeStr, 0, sizeof(userInputCodeStr));
+    userCodeInputCount = 0;
+  }
   
   if (mainMenu.get_currentScreen() == &timerScreen) {
     if (mainMenu.get_focusedLine() == 0) {
@@ -342,6 +345,7 @@ void processInput(char key) {
 //---------------------
 void processDefusalInput(char key) {
   if (userCodeInputCount >= MAX_CODE_LEN) {
+    memset(defusalCode, 0, sizeof(defusalCode));
     userCodeInputCount = 0;
     if (isArmed) lcd.setCursor(7, 0);
     else lcd.setCursor(10, 0);
