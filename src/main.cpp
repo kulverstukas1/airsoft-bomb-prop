@@ -34,6 +34,7 @@ airsoft-bomb. If not, see <https://www.gnu.org/licenses/>.
 #define KEYPAD_COLS 4
 #define LCD_COLS 16
 #define LCD_ROWS 2
+#define BEEP_TONE 1500
 #define KEYPAD_LONG_PRESS_TIME 10000
 #define TEAM_SWITCH_TIME 5000
 #define BOMB_DEFUSE_TIME 10000 // used if defusing with buttons
@@ -563,7 +564,7 @@ void updateDefusal() {
       unsigned int waitTime = getWaitTimeForBeep(defusalMillis[1], currMillisDefusal);
       if ((millis() - lastBeepMillis) > waitTime) {
         lastBeepMillis = millis();
-        tone(BUZZER_PIN, 2700, 125); // 125 millis is the same as in CSGO, apparently
+        tone(BUZZER_PIN, BEEP_TONE, 125); // 125 millis is the same as in CSGO, apparently
       }
     }
   }
